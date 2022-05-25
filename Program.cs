@@ -29,6 +29,7 @@ dotnet add package Microsoft.Data.Sqlite -s 'C:\Users\IFSP\.nuget\packages'
 using Microsoft.Data.Sqlite;
 using LabManager.Database;
 using LabManager.Repositories;
+using LabManger.Models;
 
 var databaseConfig = new DatabaseConfig();
 
@@ -56,20 +57,12 @@ if(modelName == "Computer")
         var id = Convert.ToInt32(args[2]);
         string ram = args[3];
         string processor = args[4];
-        //Console.WriteLine("Computer New");
-        //Console.WriteLine("{0}, {1}, {2}", id, ram, processor);
+        // Console.WriteLine("Computer New");
+        // Console.WriteLine("{0}, {1}, {2}", id, ram, processor);
 
-        var connection = new SqliteConnection("Data Source=database.db");
-        connection.Open();
+        var computer = new Computer(id, ram, processor);
 
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Computers VALUES($id, $ram, $processor)";
-        command.Parameters.AddWithValue("$id", id);
-        command.Parameters.AddWithValue("$ram", ram);
-        command.Parameters.AddWithValue("$processor", processor);
-
-        command.ExecuteNonQuery();
-        connection.Close();
+        computerRepository.Save(computer);
     }
 }
 
