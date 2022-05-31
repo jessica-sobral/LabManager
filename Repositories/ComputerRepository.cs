@@ -50,20 +50,6 @@ class ComputerRepository
         return computers;
     }
 
-    public Computer GetById(Computer computer)
-    {
-        var connection = new SqliteConnection(_databaseConfig.ConnectionString);
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Computers WHERE (id = $id)";
-        command.Parameters.AddWithValue("$id", computer.Id);
-
-        command.ExecuteNonQuery();
-        connection.Close();
-        return computer;
-    }
-
     public Computer Save(Computer computer)
     {
         var connection = new SqliteConnection(_databaseConfig.ConnectionString);
@@ -77,6 +63,29 @@ class ComputerRepository
 
         command.ExecuteNonQuery();
         connection.Close();
+
+        return computer;
+    }
+
+    public Computer GetById(int id)
+    {
+        var connection = new SqliteConnection(_databaseConfig.ConnectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Computers WHERE (id = $id)";
+        command.Parameters.AddWithValue("$id", id);
+
+        var reader = command.ExecuteReader();
+        reader.Read();
+
+        id = reader.GetInt32(0);
+        var ram = reader.GetString(1);
+        var processor = reader.GetString(2);
+
+        var computer = new Computer(id, ram, processor);
+
+        connection.Close(); 
 
         return computer;
     }
