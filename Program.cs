@@ -65,6 +65,15 @@ if(modelName == "Computer")
         computerRepository.Save(computer);
     }
 
+    if(modelAction == "Show")
+    {
+        var id = Convert.ToInt32(args[2]);
+
+        var computer = computerRepository.GetById(id);
+        
+        Console.WriteLine("{0}, {1}, {2}", computer.Id, computer.Ram, computer.Processor);
+    }
+
     if(modelAction == "Update")
     {
         var id = Convert.ToInt32(args[2]);
