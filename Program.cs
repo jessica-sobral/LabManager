@@ -11,6 +11,7 @@ dotnet run -- Computer Show 1
 
 Lab - Id, Number, Name, Block
 
+
 dotnet run -- Lab List
 dotnet run -- Lab New 1 '2' 'Charles ...' '2'
 dotnet run -- Lab Delete 1
@@ -54,11 +55,12 @@ if(modelName == "Computer")
 
     if(modelAction == "New")
     {
+        // Console.WriteLine("Computer New");
+        // Console.WriteLine("{0}, {1}, {2}", id, ram, processor);
+
         var id = Convert.ToInt32(args[2]);
         string ram = args[3];
         string processor = args[4];
-        // Console.WriteLine("Computer New");
-        // Console.WriteLine("{0}, {1}, {2}", id, ram, processor);
 
         var computer = new Computer(id, ram, processor);
 
@@ -69,9 +71,14 @@ if(modelName == "Computer")
     {
         var id = Convert.ToInt32(args[2]);
 
-        var computer = computerRepository.GetById(id);
-        
-        Console.WriteLine("{0}, {1}, {2}", computer.Id, computer.Ram, computer.Processor);
+        if(computerRepository.ExitsById(id))
+        {
+            var computer = computerRepository.GetById(id);
+            
+            Console.WriteLine($"{computer.Id}, {computer.Ram}, {computer.Processor}");
+        } else {
+            Console.WriteLine($"O computador com ID {id} não existe.");
+        }
     }
 
     if(modelAction == "Update")
@@ -107,7 +114,7 @@ if(modelName == "Lab")
         
         while(reader.Read())
         {
-            Console.WriteLine("{0}, {1}, {2}, {3}", reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3));
+            Console.WriteLine($"{reader.GetInt32(0)}, {reader.GetInt32(1)}, {reader.GetString(2)}, {reader.GetString(3)}");
         }
         
         connection.Close();
@@ -117,7 +124,7 @@ if(modelName == "Lab")
     {
         // Console.WriteLine("Lab New");
         var id = Convert.ToInt32(args[2]);
-        var number = args[3];
+        var number = Convert.ToInt32(args[3]);
         string name = args[4];
         string block = args[5];
 
