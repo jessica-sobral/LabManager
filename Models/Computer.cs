@@ -1,4 +1,4 @@
-namespace LabManger.Models;
+namespace LabManager.Models;
 
 class Computer
 {

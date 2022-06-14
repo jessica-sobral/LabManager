@@ -1,5 +1,5 @@
 using LabManager.Database;
-using LabManger.Models;
+using LabManager.Models;
 using Microsoft.Data.Sqlite;
 
 namespace LabManager.Repositories;
