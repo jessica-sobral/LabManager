@@ -27,16 +27,16 @@ dotnet add package Microsoft.Data.Sqlite
 dotnet add package Microsoft.Data.Sqlite -s 'C:\Users\IFSP\.nuget\packages'
 */
 
-using Microsoft.Data.Sqlite;
 using LabManager.Database;
 using LabManager.Repositories;
-using LabManger.Models;
+using LabManager.Models;
 
 var databaseConfig = new DatabaseConfig();
 
 var databaseSetup = new DatabaseSetup(databaseConfig);
 
 var computerRepository = new ComputerRepository(databaseConfig);
+var labRepository = new LabRepository(databaseConfig);
 
 // Routing
 var modelName = args[0];
@@ -104,41 +104,22 @@ if(modelName == "Lab")
     if(modelAction == "List")
     {
         Console.WriteLine("Lab List");
-        var connection = new SqliteConnection("Data Source=database.db");
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Lab";
-
-        var reader = command.ExecuteReader();
-        
-        while(reader.Read())
+        foreach (var lab in labRepository.GetAll())
         {
-            Console.WriteLine($"{reader.GetInt32(0)}, {reader.GetInt32(1)}, {reader.GetString(2)}, {reader.GetString(3)}");
+            Console.WriteLine($"{lab.Id}, {lab.Number}, {lab.Name}, {lab.Block}");
         }
-        
-        connection.Close();
     }
 
     if(modelAction == "New")
     {
         // Console.WriteLine("Lab New");
         var id = Convert.ToInt32(args[2]);
-        var number = Convert.ToInt32(args[3]);
+        string number = args[3];
         string name = args[4];
         string block = args[5];
 
-        var connection = new SqliteConnection("Data Source=database.db");
-        connection.Open();
+        var lab = new Lab(id, number, name, block);
 
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Lab VALUES($id, $number, $name, $block)";
-        command.Parameters.AddWithValue("$id", id);
-        command.Parameters.AddWithValue("$number", number);
-        command.Parameters.AddWithValue("$name", name);
-        command.Parameters.AddWithValue("$block", block);
-
-        command.ExecuteNonQuery();
-        connection.Close();
+        labRepository.Save(lab);
     }
 }
