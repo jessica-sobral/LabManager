@@ -55,6 +55,24 @@ class LabRepository
         return lab;
     }
 
+    public Lab Update(Lab lab)
+    {
+        var connection = new SqliteConnection(_databaseConfig.ConnectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE Lab SET number = $number, name = $name, block = $block WHERE (id = $id)";
+        command.Parameters.AddWithValue("$id", lab.Id);
+        command.Parameters.AddWithValue("$number", lab.Number);
+        command.Parameters.AddWithValue("$name", lab.Name);
+        command.Parameters.AddWithValue("$block", lab.Block);
+
+        command.ExecuteNonQuery();
+        connection.Close();
+
+        return lab;
+    }
+
     public void Delete(int id)
     {
         var connection = new SqliteConnection(_databaseConfig.ConnectionString);
