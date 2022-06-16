@@ -37,6 +37,20 @@ class LabRepository
         return labs;
     }
 
+    public Lab GetById(Lab lab)
+    {
+        var connection = new SqliteConnection(_databaseConfig.ConnectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Lab WHERE (id = $id)";
+        command.Parameters.AddWithValue("$id", lab.Id);
+
+        command.ExecuteNonQuery();
+        connection.Close();
+        return lab;
+    }
+
     public Lab Save(Lab lab)
     {
         var connection = new SqliteConnection(_databaseConfig.ConnectionString);
