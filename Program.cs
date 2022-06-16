@@ -123,6 +123,18 @@ if(modelName == "Lab")
         labRepository.Save(lab);
     }
 
+    if(modelAction == "Update")
+    {
+        var id = Convert.ToInt32(args[2]);
+        string number = args[3];
+        string name = args[4];
+        string block = args[5];
+
+        var lab = new Lab(id, number, name, block);
+
+        labRepository.Update(lab);
+    }
+
     if(modelAction == "Delete")
     {
         var id = Convert.ToInt32(args[2]);
