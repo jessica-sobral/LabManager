@@ -26,7 +26,6 @@ class LabRepository
     public Lab Save(Lab lab)
     {
         using var connection = new SqliteConnection(_databaseConfig.ConnectionString);
-        connection.Open();
 
         connection.Execute("INSERT INTO Lab VALUES(@Id, @Number, @Name, @Block)", lab);
 
@@ -44,18 +43,9 @@ class LabRepository
 
     public Lab Update(Lab lab)
     {
-        var connection = new SqliteConnection(_databaseConfig.ConnectionString);
-        connection.Open();
+        using var connection = new SqliteConnection(_databaseConfig.ConnectionString);
 
-        var command = connection.CreateCommand();
-        command.CommandText = "UPDATE Lab SET number = $number, name = $name, block = $block WHERE (id = $id)";
-        command.Parameters.AddWithValue("$id", lab.Id);
-        command.Parameters.AddWithValue("$number", lab.Number);
-        command.Parameters.AddWithValue("$name", lab.Name);
-        command.Parameters.AddWithValue("$block", lab.Block);
-
-        command.ExecuteNonQuery();
-        connection.Close();
+        connection.Execute("UPDATE Lab SET number = @Number, name = @Name, block = @Block WHERE (id = @Id)", lab);
 
         return lab;
     }
