@@ -15,7 +15,7 @@ Lab - Id, Number, Name, Block
 dotnet run -- Lab List
 dotnet run -- Lab New 1 '2' 'Charles ...' '2'
 dotnet run -- Lab Delete 1
-dotnet run -- Lab Update 1 '2' 'Charles ...' '2'
+dotnet run -- Lab Update 1 '8' 'Charles ...' '2'
 dotnet run -- Lab Show 1
 
 foreach (var arg in args)
@@ -127,9 +127,14 @@ if(modelName == "Lab")
     {
         var id = Convert.ToInt32(args[2]);
 
-        var lab = labRepository.GetById(id);
-
-        Console.WriteLine("{0}, {1}, {2}, {3}", lab.Id, lab.Number, lab.Name, lab.Block);
+        if(labRepository.ExitsById(id))
+        {
+            var lab = labRepository.GetById(id);
+            
+            Console.WriteLine("{0}, {1}, {2}, {3}", lab.Id, lab.Number, lab.Name, lab.Block);
+        } else {
+            Console.WriteLine($"O laboratório com ID {id} não existe.");
+        }
     }
 
     if(modelAction == "Update")
