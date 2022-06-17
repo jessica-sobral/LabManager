@@ -1,6 +1,7 @@
 using LabManager.Database;
 using LabManager.Models;
 using Microsoft.Data.Sqlite;
+using Dapper;
 
 namespace LabManager.Repositories;
 
@@ -13,44 +14,21 @@ class LabRepository
         _databaseConfig = databaseConfig;
     }
 
-    public List<Lab> GetAll()
+    public IEnumerable<Lab> GetAll()
     {
-        var labs = new List<Lab>();
+        using var connection = new SqliteConnection(_databaseConfig.ConnectionString);
 
-        var connection = new SqliteConnection(_databaseConfig.ConnectionString);
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Lab";
-
-        var reader = command.ExecuteReader();
-
-        while(reader.Read())
-        {
-            var lab = ReaderToLab(reader);
-
-            labs.Add(lab);
-        }
-
-        connection.Close(); 
+        var labs = connection.Query<Lab>("SELECT * FROM Lab");
 
         return labs;
     }
 
     public Lab Save(Lab lab)
     {
-        var connection = new SqliteConnection(_databaseConfig.ConnectionString);
+        using var connection = new SqliteConnection(_databaseConfig.ConnectionString);
         connection.Open();
 
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Lab VALUES($id, $number, $name, $block)";
-        command.Parameters.AddWithValue("$id", lab.Id);
-        command.Parameters.AddWithValue("$number", lab.Number);
-        command.Parameters.AddWithValue("$name", lab.Name);
-        command.Parameters.AddWithValue("$block", lab.Block);
-
-        command.ExecuteNonQuery();
-        connection.Close();
+        connection.Execute("INSERT INTO Lab VALUES(@Id, @Number, @Name, @Block)", lab);
 
         return lab;
     }

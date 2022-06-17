@@ -11,7 +11,6 @@ dotnet run -- Computer Show 1
 
 Lab - Id, Number, Name, Block
 
-
 dotnet run -- Lab List
 dotnet run -- Lab New 1 '2' 'Charles ...' '2'
 dotnet run -- Lab Delete 1
