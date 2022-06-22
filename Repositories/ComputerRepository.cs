@@ -1,4 +1,4 @@
- using LabManager.Database;
+using LabManager.Database;
 using LabManager.Models;
 using Microsoft.Data.Sqlite;
 using Dapper;
@@ -57,20 +57,17 @@ class ComputerRepository
         connection.Execute("DELETE FROM Computers WHERE (id = @Id)", new { Id = id });
     }
 
-    public bool ExitsById(int id)
+    public bool ExistsById(int id)
     {
-        var connection = new SqliteConnection(_databaseConfig.ConnectionString);
-        connection.Open();
+        using var connection = new SqliteConnection(_databaseConfig.ConnectionString);
 
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT count(id) FROM Computers WHERE (id = $id)";
-        command.Parameters.AddWithValue("$id", id);
+        var result = connection.ExecuteScalar<bool>("SELECT count(id) FROM Computers WHERE (id = @Id)", new { Id = id });
 
         // var reader = command.ExecuteReader();
         // reader.Read();
         // var result = reader.GetBoolean(0);
 
-        var result = Convert.ToBoolean(command.ExecuteScalar());
+        // var result = Convert.ToBoolean(command.ExecuteScalar());
 
         return result;
     }

@@ -70,7 +70,7 @@ if(modelName == "Computer")
     {
         var id = Convert.ToInt32(args[2]);
 
-        if(computerRepository.ExitsById(id))
+        if(computerRepository.ExistsById(id))
         {
             var computer = computerRepository.GetById(id);
             
@@ -126,7 +126,7 @@ if(modelName == "Lab")
     {
         var id = Convert.ToInt32(args[2]);
 
-        if(labRepository.ExitsById(id))
+        if(labRepository.ExistsById(id))
         {
             var lab = labRepository.GetById(id);
             
