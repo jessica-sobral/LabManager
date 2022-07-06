@@ -24,6 +24,7 @@ foreach (var arg in args)
 
 dotnet add package Microsoft.Data.Sqlite
 dotnet add package Microsoft.Data.Sqlite -s 'C:\Users\IFSP\.nuget\packages'
+dotnet add package dapper
 */
 
 using LabManager.Database;
