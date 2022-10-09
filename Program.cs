@@ -27,16 +27,14 @@ dotnet add package Microsoft.Data.Sqlite -s 'C:\Users\IFSP\.nuget\packages'
 dotnet add package dapper
 */
 
-using LabManager.Database;
 using LabManager.Repositories;
 using LabManager.Models;
 
-var databaseConfig = new DatabaseConfig();
+SystemContext context = new SystemContext();
+context.Database.EnsureCreated();
 
-var databaseSetup = new DatabaseSetup(databaseConfig);
-
-var computerRepository = new ComputerRepository(databaseConfig);
-var labRepository = new LabRepository(databaseConfig);
+var computerRepository = new ComputerRepository(context);
+var labRepository = new LabRepository(context);
 
 // Routing
 var modelName = args[0];
@@ -64,7 +62,7 @@ if(modelName == "Computer")
 
         var computer = new Computer(id, ram, processor);
 
-        computerRepository.Save(computer);
+        computerRepository.Add(computer);
     }
 
     if(modelAction == "Show")
@@ -95,6 +93,7 @@ if(modelName == "Computer")
     if(modelAction == "Delete")
     {
         var id = Convert.ToInt32(args[2]);
+        
         computerRepository.Delete(id);
     }
 }
@@ -120,7 +119,7 @@ if(modelName == "Lab")
 
         var lab = new Lab(id, number, name, block);
 
-        labRepository.Save(lab);
+        labRepository.Add(lab);
     }
 
     if(modelAction == "Show")
