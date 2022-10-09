@@ -1,6 +1,6 @@
 namespace LabManager.Models;
 
-class Lab
+public class Lab
 {
     public int Id { get; set; }
     public string Number { get; set; }

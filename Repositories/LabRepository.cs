@@ -40,6 +40,7 @@ class LabRepository
     public void Delete(int id)
     {
         context.Labs.Remove(GetById(id));
+        context.SaveChanges();
     }
 
     public bool ExistsById(int id)

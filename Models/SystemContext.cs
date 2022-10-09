@@ -12,7 +12,7 @@ public class SystemContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseMySQL(
-            "server=localhost;database=jess;user=root;password=123456;"
+            "server=localhost;database=labmanager;user=root;password=123456;"
         );
     }
 }
